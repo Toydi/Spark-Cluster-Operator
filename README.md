@@ -94,7 +94,14 @@ Spark-cluster Operator为用户提供了两种进入集群Master节点的方式�
 > 114.212.189.141:xxxxx(8443端口对应的端口号)
 
 <h4 id="3">示例操作1</h4>
-通过访问Master节点的Vscode容器，用户可以打包应用程序，并向Master节点提交Hadoop/Spark任务
+通过访问Master节点的Vscode容器，用户可以在Vscode界面编辑应用程序代码、并通过Vscode Terminal打包应用程序，以及向Master节点提交Hadoop/Spark任务
+> 浏览器访问：集群主节点:暴露端口号
+
+> 编辑应用程序代码(集群初始化的时候会将用户Git仓库代码clone到Master节点)
+
+> 使用mvn package打包应用
+
+> 提交Hadoop任务
 
 <h4 id="2">示例操作2</h4>
 除了通过访问Master节点的Vscode容器之外，用户还可以通过直接获得集群Master节点的终端的方式来操作Hadoop/Spark集群，由于Operator已经完成了集群中对于Hadoop/Spark的若干环境配置(对应Home目录为\$HADOOP\_HOME和\$SPARK\_HOME)，因此下面将解释相关脚本，然后直接使用hdfs等命令，来演示几种基础简单的示例操作：
