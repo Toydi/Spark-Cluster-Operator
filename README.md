@@ -18,10 +18,34 @@ Spark-cluster Operator部署的Hadoop/Spark集群，同时对Hadoop和Spark环�
 * 参数配置
 
 	Spark-cluster Operator允许用户指定偏好的参数，然后完成Hadoop/Spark集群的部署，具体的参数包括(*表示必须指定)：
-	- *slaveNum ：集群中应包含的Slave节点数，正整形数值表示
+	- *slaveNum : 集群中应包含的Slave节点数，正整形数值表示
 	
 	```
 	slaveNum: 3
+	```
+	
+	- *clusterPrefix: 集群的命名前缀，如'user1'则生成集群为'user1-cluster'
+	
+	```
+	clusterPrefix: user1
+	```
+	
+	- *gitRepo : 用户应用代码的git仓库地址，集群初始化时自动git clone代码到Master节点下
+	
+	```
+	gitRepo: https://github.com/xxx/xxx.git
+	```
+	
+	- *gitUserName: Github用户名，用于用户修改并git push自己的应用程序代码
+	
+	```
+	gitUserName: xxx
+	```
+	
+	- *gitUserEmail: Github邮箱，用于用户修改并git push自己的应用程序代码
+
+	```
+	gitUserEmail: xxxxxx@xx.com
 	```
 	
 	- pvcEnable ：是否启用持久化存储(由ceph文件系统进行支持)，True/False。持久化存储保证了当Master或者Slave发生意外故障重启时，集群在故障之前所保存的数据依然存在。为避免数据丢失，用户在启用持久化存储的同时，应将需要持久化的内容放置到HDFS文件系统对应的路径下(Master节点：/root/hdfs/namenode，Slave节点：/root/hdfs/datanode)。默认不使用。
@@ -36,7 +60,7 @@ Spark-cluster Operator部署的Hadoop/Spark集群，同时对Hadoop和Spark环�
 	ports:
 	- port: 18080
 	  name: job
-  ```
+  	```
 	
 	- resources ：资源配置，应用于集群中的所有节点。资源包括CPU和内存Memory，配置包括需求量requests和限制量limits。默认不配置。
 
@@ -48,7 +72,7 @@ Spark-cluster Operator部署的Hadoop/Spark集群，同时对Hadoop和Spark环�
   	  requests:
   	    cpu: "1"
   	    memory: "1500Mi"
-    ```
+   	 ```
 	
 	- nfs：是否启用共享文件夹功能。共享文件夹功能将server:path(由管理员进行指定)下的文件夹挂载到集群中Master Pod中的相同路径下。默认不使用。
 	
@@ -65,6 +89,9 @@ Spark-cluster Operator为用户提供了两种进入集群Master节点的方式�
 
 * 使用ssh命令 ：在集群中，Operator默认将Master节点的22端口通过NodePort的方式进行暴露，因此用户通过kubernetes集群的主节点ip和暴露出来的端口号(已获得且同一局域网内允许访问)，可直接使用ssh命令来进入到Master节点中，默认密码为123456。
 > ssh 1.2.3.4 -p 暴露的端口号
+
+* 浏览器访问 ：在集群中，Operator将Master节点的8443端口通过NodePort的方式进行暴露，因此用户通过kubernetes集群的主节点ip和暴露出来的端口号，可直接进入到Master节点的vscode界面，打开vscode的Terminal可以想Master节点提交hadoop/spark任务
+> 114.212.189.141:xxxxx(8443端口对应的端口号)
 
 <h4 id="2">示例操作</h4>
 用户通过上述的方法获得集群Master节点的终端，由于Operator已经完成了集群中对于Hadoop/Spark的若干环境配置(对应Home目录为\$HADOOP\_HOME和\$SPARK\_HOME)，因此下面将解释相关脚本，然后直接使用hdfs等命令，来演示几种基础简单的示例操作：
