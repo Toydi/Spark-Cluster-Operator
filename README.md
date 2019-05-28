@@ -79,7 +79,7 @@ Spark-cluster Operator部署的Hadoop/Spark集群，同时对Hadoop和Spark环�
 	```
 	nfs: False
 	```
-	
+
 ## 使用终端命令行操作集群
 
 #### 获得Master终端
@@ -90,11 +90,13 @@ Spark-cluster Operator为用户提供了两种进入集群Master节点的方式�
 * 使用ssh命令 ：在集群中，Operator默认将Master节点的22端口通过NodePort的方式进行暴露，因此用户通过kubernetes集群的主节点ip和暴露出来的端口号(已获得且同一局域网内允许访问)，可直接使用ssh命令来进入到Master节点中，默认密码为123456。
 > ssh 1.2.3.4 -p 暴露的端口号
 
-* 浏览器访问 ：在集群中，Operator将Master节点的8443端口通过NodePort的方式进行暴露，因此用户通过kubernetes集群的主节点ip和暴露出来的端口号，可直接进入到Master节点的vscode界面，打开vscode的Terminal可以想Master节点提交hadoop/spark任务
+* 浏览器访问Vscode容器 ：在集群中，Operator将Master节点的8443端口通过NodePort的方式进行暴露，因此用户通过kubernetes集群的主节点ip和暴露出来的端口号，可直接进入到Master节点的vscode容器，用户可以修改并git push应用程序的代码，还可以通过vscode的Terminal打包应用，以及向Master节点提交hadoop/spark任务
 > 114.212.189.141:xxxxx(8443端口对应的端口号)
 
-<h4 id="2">示例操作</h4>
-用户通过上述的方法获得集群Master节点的终端，由于Operator已经完成了集群中对于Hadoop/Spark的若干环境配置(对应Home目录为\$HADOOP\_HOME和\$SPARK\_HOME)，因此下面将解释相关脚本，然后直接使用hdfs等命令，来演示几种基础简单的示例操作：
+<h4 id="3">示例操作1</h4>
+
+<h4 id="2">示例操作2</h4>
+除了通过访问Master节点的Vscode容器之外，用户还可以通过直接获得集群Master节点的终端的方式来操作Hadoop/Spark集群，由于Operator已经完成了集群中对于Hadoop/Spark的若干环境配置(对应Home目录为\$HADOOP\_HOME和\$SPARK\_HOME)，因此下面将解释相关脚本，然后直接使用hdfs等命令，来演示几种基础简单的示例操作：
 
 * 基础脚本 ：部署好的Hadoop/Spark集群中的每一个节点(Master或者Slave)的根目录下，都有三个基础脚本：
 
@@ -172,7 +174,7 @@ Spark-cluster Operator为用户提供了两种进入集群Master节点的方式�
 
 * GET /apis/terminal?sparkcluster=cluster-1
 
-	在参数中指定集群名称，结果将返回一个web终端，终端对应于集群名称为cluster-1中的Master Pod中所运行的容器。用户可直接在终端中使用命令行来对集群进行操作，详见[示例操作](#2)。
+	在参数中指定集群名称，结果将返回一个web终端，终端对应于集群名称为cluster-1中的Master Pod中所运行的容器。用户可直接在终端中使用命令行来对集群进行操作，详见[示例操作1(#3)][示例操作2](#2)。
 	
 	![web-terminal](manifest/web-terminal.png)
 
