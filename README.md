@@ -34,15 +34,20 @@ Spark-cluster Operator部署的Hadoop/Spark集群，同时对Hadoop和Spark环�
 	
 	```
 	gitRepo: https://github.com/xxx/xxx.git
+	
+	```
+	- *datasets: 需要挂载的数据集，如["dataset1"]
+	```
+	datasets: ["dataset1"]
 	```
 	
-	- *gitUserName: Github用户名，用于用户修改并git push自己的应用程序代码
+	- gitUserName: Github用户名，用于用户修改并git push自己的应用程序代码
 	
 	```
 	gitUserName: xxx
 	```
 	
-	- *gitUserEmail: Github邮箱，用于用户修改并git push自己的应用程序代码
+	- gitUserEmail: Github邮箱，用于用户修改并git push自己的应用程序代码
 
 	```
 	gitUserEmail: xxxxxx@xx.com
@@ -99,9 +104,16 @@ Spark-cluster Operator为用户提供了两种进入集群Master节点的方式�
 
 > 编辑应用程序代码(集群初始化的时候会将用户Git仓库代码clone到Master节点)
 
+	![vscode](manifest/vscode-code.png)
+
 > 使用mvn package打包应用
 
+	![mvn_package](manifest/mvn_package.png)
+
 > 提交Hadoop任务
+
+	![hadoop_job](manifest/hadoop_job.png)
+
 
 <h4 id="2">示例操作2</h4>
 除了通过访问Master节点的Vscode容器之外，用户还可以通过直接获得集群Master节点的终端的方式来操作Hadoop/Spark集群，由于Operator已经完成了集群中对于Hadoop/Spark的若干环境配置(对应Home目录为\$HADOOP\_HOME和\$SPARK\_HOME)，因此下面将解释相关脚本，然后直接使用hdfs等命令，来演示几种基础简单的示例操作：
@@ -134,27 +146,15 @@ Spark-cluster Operator为用户提供了两种进入集群Master节点的方式�
 	![local-example-2](manifest/local-example-2.png) 
 
 <h2 id="1">API介绍</h2>
-* POST /apis/sparkcluster (setting.json)
+* POST ics.nju.edu.cn/bdkit/apis/sparkcluster (setting.json)
 
 	以参数中的用户所指定的参数信息(JSON格式)作为输入，进行POST接口的调用。整合前面参数配置小节中的配置为例：
 	
 	```
-	slaveNum: 3
-	pvcEnable: False
-	
-	ports:
-    - port: 18080
-      name: job
-      
-    resources:
-      limits:
-        cpu: "2"
-        memory: "2000Mi"
-      requests:
-        cpu: "1"
-        memory: "1500Mi"
-    
-    nfs: False
+        "clusterPrefix": "user2",
+        "slaveNum": 3,
+	"gitRepo": "https://github.com/Toydi/WordCount.git", 
+        "datasets": ["dataset1"]
 	```
 	
 	创建一个新的集群，返回请求状态码和集群的信息：
@@ -164,7 +164,7 @@ Spark-cluster Operator为用户提供了两种进入集群Master节点的方式�
 	![create-sparkcluster](manifest/create-sparkcluster.png)
 	
 
-* GET 	/apis/sparkcluster
+* GET 	ics.nju.edu.cn/bdkit/apis/sparkcluster
 	
 	返回对应部署的集群的信息(JSON格式)。
 	
@@ -180,10 +180,36 @@ Spark-cluster Operator为用户提供了两种进入集群Master节点的方式�
 	
 	![sparkcluster-status-2](manifest/sparkcluster-status-2.png)
 
-* GET /apis/terminal?sparkcluster=cluster-1
+* GET ics.nju.edu.cn/bdkit/apis/terminal?sparkcluster=cluster-1
 
-	在参数中指定集群名称，结果将返回一个web终端，终端对应于集群名称为cluster-1中的Master Pod中所运行的容器。用户可直接在终端中使用命令行来对集群进行操作，详见[示例操作1](#3)[示例操作2](#2)。
+	在参数中指定集群名称，结果将返回一个web终端，终端对应于集群名称为cluster-1中的Master Pod中所运行的容器。用户可直接在终端中使用命令行来对集群进行操作，详见[示例操作2](#2)。
 	
 	![web-terminal](manifest/web-terminal.png)
+	
+* POST 	ics.nju.edu.cn/bdkit/apis/dataset
+	以参数中的用户所指定的参数信息(JSON格式)作为输入，进行POST接口的调用。创建一个新的dataset：
+	```
+	"name": "dataset-1"
+	"description": "Test dataset"
+	```
+	创建一个新的数据集，返回请求状态码和相关信息：
+	
+	![create_dataset](manifest/create-dataset.png)
+
+* GET 	ics.nju.edu.cn/bdkit/apis/dataset
+	
+	返回已有的数据集的信息(JSON格式)。
+	
+	![get-dataset](manifest/get-dataset.png)
+	
+	前面所设置的相关参数可以从spec字段中看到(不存在即使用默认值)：
+	
+	![dataset-spec](manifest/dataset-spec.png)
+	
+	同时还可以从status字段中获得当前dataset的状态，以及暴露出来的NodePort端口等：
+	
+	![dataset-status](manifest/dataset-status.png)
+		
+
 
 
