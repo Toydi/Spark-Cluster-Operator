@@ -89,7 +89,7 @@ Spark-cluster Operator部署的Hadoop/Spark集群，同时对Hadoop和Spark环�
 ## 使用终端命令行操作集群
 
 #### 获得Master终端
-Spark-cluster Operator为用户提供了两种进入集群Master节点的方式，使得用户可以通过终端命令行来对部署好的集群进行操作：
+Spark-cluster Operator为用户提供了三种种进入集群Master节点的方式，使得用户可以通过终端命令行来对部署好的集群进行操作：
 
 * 调用API接口 ：用户可调用Operator提供的[API接口](#1)，在参数中指定集群的名称，返回结果为内嵌的终端，终端便对应于指定集群名称的Master节点。用户可通过终端来进行具体的操作。
 
