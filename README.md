@@ -36,10 +36,10 @@ Spark-cluster Operator部署的Hadoop/Spark集群，同时对Hadoop和Spark环�
 	gitRepo: https://github.com/xxx/xxx.git
 	```
 	
-	- *datasets: 需要挂载的数据集，如["dataset1"]
+	- *datasets: 需要挂载的数据集，如"dataset1"
 	
 	```
-        datasets: ["dataset1"]
+        datasets: "dataset1"
 	```
 	
 	- gitUserName: Github用户名，用于用户修改并git push自己的应用程序代码
